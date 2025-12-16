@@ -1,5 +1,5 @@
-import { Button } from "../atoms/button";
-import { Input } from "../atoms/input";
+import { Button } from "../atoms/button/button";
+import { Input } from "../atoms/input/input";
 
 type Props = {
   inputProps?: React.ComponentProps<"input">;

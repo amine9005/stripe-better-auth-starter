@@ -2,7 +2,7 @@ import Image from "next/image";
 
 // import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { memo } from "react";
-import { Button, buttonVariants } from "../atoms/button";
+import { Button, buttonVariants } from "../atoms/button/button";
 
 const Hero = () => {
   return (

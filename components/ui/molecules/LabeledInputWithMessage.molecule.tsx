@@ -1,5 +1,5 @@
-import { Input } from "../atoms/input";
-import { Label } from "../atoms/label";
+import { Input } from "../atoms/input/input";
+import { Label } from "../atoms/label/label";
 import { P } from "../atoms/text/Text";
 
 type Props = {

@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/atoms/button";
+import { Button } from "@/components/ui/atoms/button/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/atoms/dropdown-menu";
+} from "@/components/ui/atoms/dropdown-menu/dropdown-menu";
 
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";

@@ -1,5 +1,5 @@
-import { Badge } from "@/components/ui/atoms/badge";
-import { buttonVariants } from "@/components/ui/atoms/button";
+import { Badge } from "@/components/ui/atoms/badge/badge";
+import { buttonVariants } from "@/components/ui/atoms/button/button";
 import {
   Card,
   CardContent,
@@ -7,7 +7,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/atoms/card";
+} from "@/components/ui/atoms/card/card";
 import { Check } from "lucide-react";
 import Link from "next/link";
 

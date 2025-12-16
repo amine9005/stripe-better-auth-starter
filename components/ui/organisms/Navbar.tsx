@@ -3,11 +3,11 @@ import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
-} from "@/components/ui/atoms/navigation-menu";
+} from "@/components/ui/atoms/navigation-menu/navigation-menu";
 
 import { LogOut } from "lucide-react";
 import { ModeToggle } from "./ModeToggle";
-import { Button, buttonVariants } from "../atoms/button";
+import { Button, buttonVariants } from "../atoms/button/button";
 import Link from "next/link";
 // import { signOutAction } from "@/app/api/actions/auth/authActions";
 interface RouteProps {

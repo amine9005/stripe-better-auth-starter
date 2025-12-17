@@ -1,12 +1,18 @@
 import { Meta, StoryObj } from "@storybook/nextjs-vite";
 import SearchBar1 from "./searchBar1.molecule";
 
-import { Search } from "@/components/ui/atoms/button/button.stories";
+import {
+  buttonKnobs,
+  Search,
+} from "@/components/ui/atoms/button/button.stories";
 import { SearchInput } from "@/components/ui/atoms/input/input.stories";
+import { Button } from "@/components/ui/atoms/button/button";
+import { Input } from "@/components/ui/atoms/input/input";
 
 const meta: Meta<typeof SearchBar1> = {
   title: "Molecules/Search/SearchBar1",
   component: SearchBar1,
+  subcomponents: { Button, Input },
   tags: ["autodocs"],
   parameters: {
     layout: "centered",

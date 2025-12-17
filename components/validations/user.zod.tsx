@@ -17,6 +17,7 @@ export const passwordValidation = z
     message:
       "Should Contain at least one uppercase letter and have a minimum length of 8 characters.",
   }).regex;
+
 export const signUpSchema = z.object({
   username: usernameValidation,
   email: emailValidation,

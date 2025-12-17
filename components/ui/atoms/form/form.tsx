@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import * as React from "react";
 import type * as LabelPrimitive from "@radix-ui/react-label";
@@ -15,6 +15,7 @@ import {
 
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/atoms/label/label";
+import { P } from "../text/Text";
 
 const Form = FormProvider;
 
@@ -123,11 +124,14 @@ function FormControl({ ...props }: React.ComponentProps<typeof Slot>) {
   );
 }
 
-function FormDescription({ className, ...props }: React.ComponentProps<"p">) {
+function FormDescription({
+  className,
+  ...props
+}: React.ComponentProps<typeof P>) {
   const { formDescriptionId } = useFormField();
 
   return (
-    <p
+    <P
       data-slot="form-description"
       id={formDescriptionId}
       className={cn("text-muted-foreground text-sm", className)}
@@ -136,7 +140,7 @@ function FormDescription({ className, ...props }: React.ComponentProps<"p">) {
   );
 }
 
-function FormMessage({ className, ...props }: React.ComponentProps<"p">) {
+function FormMessage({ className, ...props }: React.ComponentProps<typeof P>) {
   const { error, formMessageId } = useFormField();
   const body = error ? String(error?.message ?? "") : props.children;
 
@@ -145,14 +149,14 @@ function FormMessage({ className, ...props }: React.ComponentProps<"p">) {
   }
 
   return (
-    <p
+    <P
       data-slot="form-message"
       id={formMessageId}
       className={cn("text-destructive text-sm", className)}
       {...props}
     >
       {body}
-    </p>
+    </P>
   );
 }
 

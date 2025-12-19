@@ -1,9 +1,9 @@
-import BugReportFormActions from "@/components/ui/actions/forms/BugReportForm.actions";
+import SignInCardAction from "@/components/ui/actions/forms/LoginForm.action";
 
 export default function Home() {
   return (
     <main>
-      <BugReportFormActions />
+      <SignInCardAction />
     </main>
   );
 }

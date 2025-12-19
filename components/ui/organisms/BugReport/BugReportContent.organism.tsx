@@ -1,24 +1,38 @@
 "use client";
 import { FieldGroup } from "@/components/ui/atoms/field/field";
-
-import { FormType } from "@/components/validations/bugReport.zod";
-import InputField from "./fields/InputField.organism";
-import TextAreaField from "./fields/TextAreaField.organism";
+import { FormType, schemaType } from "@/validations/bugReport.zod";
+import TextAreaField from "@/components/ui/organisms/BugReport/fields/text-area-field/TextAreaField.molecule";
+import InputField from "@/components/ui/organisms/BugReport/fields/input-field/InputField.molecule";
 
 interface Props {
   form: FormType;
+  handle_submit: (data: schemaType) => void;
+  formName: string;
 }
 
-const BugReportContent = ({ form }: Props) => {
-  const handle_submit = () => {
-    console.log(" submitting");
-  };
+const inputFieldValues = {
+  name: "title",
+  labelTitle: "Title",
+  type: "text",
+  placeholder: "What issues are you experiencing in ",
+  autoComplete: "off",
+};
 
+const textareaFieldValues = {
+  name: "description",
+  fieldLabel: "Description",
+  placeholder: "place your description here",
+  rows: 6,
+  charLimits: 200,
+  fieldDescription: "field description",
+};
+
+const BugReportContent = ({ form, formName, handle_submit }: Props) => {
   return (
-    <form id="form-rhf-demo" onSubmit={form?.handleSubmit(handle_submit)}>
+    <form id={`form-${formName}`} onSubmit={form?.handleSubmit(handle_submit)}>
       <FieldGroup>
-        <InputField form={form} />
-        <TextAreaField form={form} />
+        <InputField form={form} item={inputFieldValues} />
+        <TextAreaField form={form} item={textareaFieldValues} />
       </FieldGroup>
     </form>
   );

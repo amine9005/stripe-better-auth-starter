@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 // import { Inter } from "next/font/google";
 import "./globals.css";
 // import { ThemeProvider } from "@/providers/ThemeProvider";
-import { Navbar } from "@/components/ui/organisms/Navbar";
+// import { Navbar } from "@/components/ui/organisms/Navbar";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -28,7 +28,7 @@ export default function RootLayout({
         {/* disableTransitionOnChange */}
         {/* storageKey="theme" */}
         {/* > */}
-        <Navbar />
+        {/* <Navbar /> */}
         {children}
         {/* </ThemeProvider> */}
       </body>

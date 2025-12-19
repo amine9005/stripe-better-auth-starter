@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/atoms/button/button";
 import {
   Card,
   CardContent,
@@ -8,35 +7,45 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/atoms/card/card";
-import { Field } from "@/components/ui/atoms/field/field";
 import BugReportContent from "./BugReportContent.organism";
-import { FormType } from "@/components/validations/bugReport.zod";
+import { FormType, schemaType } from "@/validations/bugReport.zod";
+import SubmitField from "@/components/ui/molecules/submit-field/SubmitField.molecule";
+
+interface Card {
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+}
 
 interface Props {
   form: FormType;
+  card: Card;
+  formName: string;
+  handle_submit: (formData: schemaType) => void;
+  handle_reset: () => void;
 }
 
-export function BugReportFormCard({ form }: Props) {
+export function BugReportFormCard({
+  form,
+  card,
+  formName,
+  handle_submit,
+  handle_reset,
+}: Props) {
   return (
     <Card className="w-full sm:max-w-md">
       <CardHeader>
-        <CardTitle>Bug Report</CardTitle>
-        <CardDescription>
-          Help us improve by reporting bugs you encounter.
-        </CardDescription>
+        <CardTitle>{card.title}</CardTitle>
+        <CardDescription>{card.description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <BugReportContent form={form} />
+        <BugReportContent
+          form={form}
+          formName={formName}
+          handle_submit={handle_submit}
+        />
       </CardContent>
       <CardFooter>
-        <Field orientation="horizontal">
-          <Button type="button" variant="outline" onClick={() => form?.reset()}>
-            Reset
-          </Button>
-          <Button type="submit" form="form-rhf-demo">
-            Submit
-          </Button>
-        </Field>
+        <SubmitField handle_reset={handle_reset} formName={formName} />
       </CardFooter>
     </Card>
   );

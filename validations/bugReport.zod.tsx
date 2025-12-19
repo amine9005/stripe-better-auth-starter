@@ -12,7 +12,7 @@ const formSchema = z.object({
   description: z
     .string()
     .min(20, "Description must be at least 20 characters.")
-    .max(100, "Description must be at most 100 characters."),
+    .max(200, "Description must be at most 100 characters."),
 });
 
 function onSubmit(data: z.infer<typeof formSchema>) {
@@ -44,7 +44,6 @@ export const useBugReportForm = () => {
   return form;
 };
 
-export type FormType = UseFormReturn<{
-  title: string;
-  description: string;
-}>;
+export type schemaType = z.infer<typeof formSchema>;
+
+export type FormType = UseFormReturn<schemaType>;

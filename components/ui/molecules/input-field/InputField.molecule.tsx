@@ -41,4 +41,4 @@ const InputField = ({ item, field, fieldState }: Props) => {
   );
 };
 
-export default InputField;
+export default memo(InputField);

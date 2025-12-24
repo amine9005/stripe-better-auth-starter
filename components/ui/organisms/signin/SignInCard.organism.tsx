@@ -70,4 +70,4 @@ const SignInFormCard = ({
   );
 };
 
-export default SignInFormCard;
+export default memo(SignInFormCard);

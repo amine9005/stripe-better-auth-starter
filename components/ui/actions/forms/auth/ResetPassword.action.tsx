@@ -17,10 +17,11 @@ import { memo } from "react";
 import { redirect } from "next/navigation";
 
 const ResetPasswordAction = () => {
-  const form = useResetPasswordForm();
-  const { handle_submit, loading } = useResetPasswordSubmit();
-
   const token = new URLSearchParams(window.location.search).get("token");
+
+  const form = useResetPasswordForm();
+  const { handleSubmit } = form;
+  const { onSubmit, loading } = useResetPasswordSubmit(token);
 
   if (!token) {
     redirect("/request-reset-password");
@@ -52,10 +53,7 @@ const ResetPasswordAction = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <form
-            id={"form-" + formName}
-            onSubmit={(e) => handle_submit(e, form, token)}
-          >
+          <form id={"form-" + formName} onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup>
               <Controller
                 name="password"

@@ -7,7 +7,8 @@ import { useSignUpSubmit } from "@/hooks/useAuthSubmit.hook";
 
 const SignInCardAction = () => {
   const form = useSignUp();
-  const { handle_submit, loading } = useSignUpSubmit();
+  const { handleSubmit } = form;
+  const { onSubmit, loading } = useSignUpSubmit(form);
 
   const card = { title: "Welcome, Sign Up", description: "" };
 
@@ -19,7 +20,7 @@ const SignInCardAction = () => {
         form={form}
         card={card}
         formName="sign-in"
-        handle_submit={(e) => handle_submit(e, form)}
+        handle_submit={handleSubmit(onSubmit)}
       />
     </FormLayout>
   );

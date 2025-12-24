@@ -19,8 +19,9 @@ import { memo } from "react";
 
 const RequestResetPasswordAction = () => {
   const form = useRequestResetPasswordForm();
-  const { handle_submit, loading, isSubmitted } =
-    useRequestResetPasswordSubmit();
+  const { handleSubmit } = form;
+  const { onSubmit, loading, isSubmitted } =
+    useRequestResetPasswordSubmit(form);
 
   const formName = "reset-password";
 
@@ -52,10 +53,7 @@ const RequestResetPasswordAction = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <form
-            id={"form-" + formName}
-            onSubmit={(e) => handle_submit(e, form)}
-          >
+          <form id={"form-" + formName} onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup>
               <Controller
                 name="email"

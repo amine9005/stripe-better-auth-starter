@@ -9,8 +9,8 @@ const emailSentValues = {
   redirectLink: "/sign-in",
 };
 
-const VerifiyEmailAction = () => {
+const VerifyEmailAction = () => {
   return <EmailSent props={emailSentValues} />;
 };
 
-export default memo(VerifiyEmailAction);
+export default memo(VerifyEmailAction);

@@ -69,4 +69,4 @@ const LoginFormContent = ({ form, formName, handle_submit }: Props) => {
   );
 };
 
-export default LoginFormContent;
+export default memo(LoginFormContent);

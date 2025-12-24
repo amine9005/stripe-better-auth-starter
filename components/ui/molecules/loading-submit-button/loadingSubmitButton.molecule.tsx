@@ -45,4 +45,4 @@ const LoadingSubmitButton = ({
   );
 };
 
-export default LoadingSubmitButton;
+export default memo(LoadingSubmitButton);

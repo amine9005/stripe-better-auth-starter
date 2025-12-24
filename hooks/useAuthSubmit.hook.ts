@@ -8,10 +8,13 @@ import { checkAndWatchForm } from "@/helpers/formsHelpers";
 import { signInWithGoogleClient } from "@/lib/auth-client";
 import {
   EmailFormType,
+  EmailSchemaType,
   PasswordFormType,
+  PasswordSchemaType,
   SignInFormType,
   SignInSchemaType,
   SignUpFormType,
+  SignUpSchemaType,
 } from "@/validations/user.zod";
 import { redirect } from "next/navigation";
 import { FormEvent, useCallback, useState } from "react";
@@ -21,77 +24,78 @@ import { toast } from "react-hot-toast";
 export function useSignInSubmit(form: SignInFormType) {
   const [loading, setLoading] = useState(false);
 
-  const onSubmit: SubmitHandler<SignInSchemaType> = async (data) => {
-    let success = false;
-    let isNotVerified = false;
-    console.log("clicked 2");
+  const onSubmit: SubmitHandler<SignInSchemaType> = useCallback(
+    async (data) => {
+      let success = false;
+      let isNotVerified = false;
+      setLoading(true);
+      try {
+        await signInAction(data);
 
-    setLoading(true);
-    try {
-      await signInAction(data);
+        success = true;
+      } catch (error) {
+        console.log("error: ", error);
 
-      success = true;
-    } catch (error) {
-      console.log("error: ", error);
-
-      if (
-        error instanceof Error &&
-        error.message.includes("Email not verified")
-      ) {
-        toast.error("verify your email first.");
-        isNotVerified = true;
-      } else if (error instanceof Error && error.message.includes("password")) {
-        form.setError("password", {
-          type: "custom",
-          message: "Invalid Email or Password",
-        });
-        form.setError("email", {
-          type: "custom",
-          message: "Invalid Email or Password",
-        });
-      } else {
-        toast.error("Something went wrong. Please try again.");
-        console.log("error ", error);
+        if (
+          error instanceof Error &&
+          error.message.includes("Email not verified")
+        ) {
+          toast.error("verify your email first.");
+          isNotVerified = true;
+        } else if (
+          error instanceof Error &&
+          error.message.includes("password")
+        ) {
+          form.setError("password", {
+            type: "custom",
+            message: "Invalid Email or Password",
+          });
+          form.setError("email", {
+            type: "custom",
+            message: "Invalid Email or Password",
+          });
+        } else {
+          toast.error("Something went wrong. Please try again.");
+          console.log("error ", error);
+        }
       }
-    }
 
-    if (isNotVerified) {
-      redirect("/verify-email");
-    }
-    if (success) {
-      redirect("/dashboard");
-    }
-    setLoading(false);
-  };
+      if (isNotVerified) {
+        redirect("/verify-email");
+      }
+      if (success) {
+        redirect("/dashboard");
+      }
+      setLoading(false);
+    },
+    [form],
+  );
 
   // return handleSubmit(onSubmit);
 
   return { onSubmit, loading };
 }
 
-export function useSignUpSubmit() {
+export function useSignUpSubmit(form: SignUpFormType) {
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
 
-  const handle_submit = useCallback(
-    async (e: FormEvent, form: SignUpFormType) => {
-      checkAndWatchForm(e, form);
-      if (form.formState.isValid) {
-        setLoading(true);
+  const onSubmit: SubmitHandler<SignUpSchemaType> = useCallback(
+    async (data) => {
+      let success = false;
+      setLoading(true);
 
-        try {
-          await signUpAction(form.getValues());
-          setSuccess(true);
-        } catch (error) {
-          if (error instanceof Error && error.message.includes("Email")) {
-            form.setError("email", {
-              type: "custom",
-              message: "Email Already Exists",
-            });
-          } else {
-            toast.error("Something went wrong. Please try again.");
-            console.log("error ", error);
-          }
+      try {
+        await signUpAction(data);
+        success = true;
+      } catch (error) {
+        if (error instanceof Error && error.message.includes("email")) {
+          form.setError("email", {
+            type: "custom",
+            message: "Email Already Exists",
+          });
+        } else {
+          toast.error("Something went wrong. Please try again.");
+          console.log("error ", error);
         }
       }
 
@@ -101,69 +105,66 @@ export function useSignUpSubmit() {
       setLoading(false);
     },
 
-    [success],
+    [form],
   );
-  return { handle_submit, loading };
+  return { onSubmit, loading };
 }
 
-export function useRequestResetPasswordSubmit() {
+export function useRequestResetPasswordSubmit(form: EmailFormType) {
   const [loading, setLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handle_submit = useCallback(
-    async (e: FormEvent, form: EmailFormType) => {
-      checkAndWatchForm(e, form);
-      if (form.formState.isValid) {
-        setLoading(true);
+  const onSubmit: SubmitHandler<EmailSchemaType> = useCallback(
+    async (data) => {
+      setLoading(true);
 
-        try {
-          const email = form.getValues().email as string;
+      try {
+        const email = data.email as string;
 
-          await requestResetPasswordAction(email);
-          setIsSubmitted(true);
-        } catch (error) {
-          if (error instanceof Error && error.message.includes("Email")) {
-            form.setError("email", {
-              type: "custom",
-              message: "Email Does NOT Exists",
-            });
-          } else {
-            toast.error("Something went wrong. Please try again.");
-            console.log("error ", error);
-          }
+        await requestResetPasswordAction(email);
+        setIsSubmitted(true);
+      } catch (error) {
+        if (error instanceof Error && error.message.includes("Email")) {
+          form.setError("email", {
+            type: "custom",
+            message: "Email Does NOT Exists",
+          });
+        } else {
+          toast.error("Something went wrong. Please try again.");
+          console.log("error ", error);
         }
       }
 
       setLoading(false);
     },
-    [],
+    [form],
   );
-  return { handle_submit, loading, isSubmitted };
+  return { onSubmit, loading, isSubmitted };
 }
 
-export function useResetPasswordSubmit() {
+export function useResetPasswordSubmit(token: string | null) {
   const [loading, setLoading] = useState(false);
 
-  const handle_submit = useCallback(
-    async (e: FormEvent, form: PasswordFormType, token: string) => {
+  const onSubmit: SubmitHandler<PasswordSchemaType> = useCallback(
+    async (data) => {
       let success = false;
-      checkAndWatchForm(e, form);
-      if (form.formState.isValid) {
-        setLoading(true);
+      setLoading(true);
+      try {
+        if (!token) {
+          throw new Error("token does not exist");
+        }
 
-        try {
-          const password = form.getValues().password as string;
+        const password = data.password as string;
 
-          await resetPasswordAction(password, token);
-          success = true;
-        } catch (error) {
-          if (error instanceof Error && error.message.includes("token")) {
-            toast.error("Invalid token .");
-            console.log("error ", error);
-          } else {
-            toast.error("Something went wrong. Please try again.");
-            console.log("error ", error);
-          }
+        await resetPasswordAction(password, token);
+        success = true;
+      } catch (error) {
+        if (error instanceof Error && error.message.includes("token")) {
+          toast.error("Invalid token .");
+          console.log("error ", error);
+        } else {
+          toast.error("Something went wrong. Please try again.");
+          console.log("error ", error);
         }
       }
 
@@ -173,9 +174,9 @@ export function useResetPasswordSubmit() {
       setLoading(false);
     },
 
-    [],
+    [token],
   );
-  return { handle_submit, loading };
+  return { onSubmit, loading };
 }
 
 export function useGoogleSignInHook() {

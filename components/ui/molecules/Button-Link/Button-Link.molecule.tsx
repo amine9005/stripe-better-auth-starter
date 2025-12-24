@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/atoms/button/button";
 import Link from "next/link";
 import { WidthOptions } from "@/components/ui/atoms/button/button.variants";
+import { memo } from "react";
 
 interface Props {
   children: React.ReactNode;
@@ -21,4 +22,4 @@ const ButtonLink = ({ width, children, href }: Props) => {
   );
 };
 
-export default ButtonLink;
+export default memo(ButtonLink);

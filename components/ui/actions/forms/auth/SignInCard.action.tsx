@@ -26,4 +26,4 @@ const SignInCardAction = () => {
   );
 };
 
-export default SignInCardAction;
+export default memo(SignInCardAction);

@@ -1,21 +1,22 @@
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { authClient } from "@/lib/auth-client";
 import { redirect } from "next/navigation";
 
 export async function getSession() {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
+    const { data, error } = await authClient.getSession();
 
-    if (!session) {
+    if (error) {
       throw new Error(`Authentication Error`);
     }
 
-    return session;
+    return data;
   } catch {
     console.log("Authentication failed");
   }
+}
+
+export async function getUser() {
+  return (await authClient.getSession()).data;
 }
 
 export async function authIsRequired() {

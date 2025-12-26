@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/atoms/card/card";
 import { Check } from "lucide-react";
-import Link from "next/link";
+import PaymentLinkMolecule from "../molecules/payment-link/PaymentLink.molecule";
 
 enum PopularPlanType {
   NO = 0,
@@ -24,6 +24,7 @@ interface PricingProps {
   buttonText: string;
   benefitList: string[];
   href: string;
+  paymentLink?: string;
   billing: string;
 }
 
@@ -42,7 +43,7 @@ const pricingList: PricingProps[] = [
       "Community support",
       "lorem ipsum dolor",
     ],
-    href: "/api/auth/login",
+    href: "/sign-in",
     billing: "/month",
   },
   {
@@ -59,7 +60,8 @@ const pricingList: PricingProps[] = [
       "Priority support",
       "lorem ipsum dolor",
     ],
-    href: "/api/auth/login",
+    href: "/sign-in",
+    paymentLink: process.env.STRIPE_PERSONAL_MONTHLY_PLAN_LINK!,
     billing: "/month",
   },
   {
@@ -76,14 +78,15 @@ const pricingList: PricingProps[] = [
       "Priority support",
       "lorem ipsum dolor",
     ],
-    href: "/api/auth/login",
+    href: "/sign-in",
+    paymentLink: process.env.STRIPE_PERSONAL_YEARLY_PLAN_LINK!,
     billing: "/year",
   },
 ];
 
 export const Pricing = () => {
   return (
-    <section id="pricing" className="max-w-7xl mx-auto py-24 sm:py-32">
+    <section id="pricing" className="w-full max-w-7xl mx-auto py-24 sm:py-32">
       <h2 className="text-3xl md:text-4xl font-bold text-center">
         Get
         <span className="bg-linear-to-b from-[#667EEA] to-[#764BA2] uppercase text-transparent bg-clip-text">
@@ -127,9 +130,11 @@ export const Pricing = () => {
             </CardHeader>
 
             <CardContent>
-              <Link href={pricing.href} className={buttonVariants()}>
-                {pricing.buttonText}
-              </Link>
+              <PaymentLinkMolecule
+                href={pricing.href}
+                paymentLink={pricing.paymentLink}
+                text={pricing.buttonText}
+              />
             </CardContent>
 
             <hr className="w-4/5 m-auto mb-4" />

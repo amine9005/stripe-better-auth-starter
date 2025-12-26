@@ -9,7 +9,8 @@ import { LogOut } from "lucide-react";
 import { ModeToggle } from "./ModeToggle";
 import { Button, buttonVariants } from "../atoms/button/button";
 import Link from "next/link";
-// import { signOutAction } from "@/app/api/actions/auth/authActions";
+import { signOutAction } from "@/app/api/actions/auth/auth.controller";
+import { getUser } from "@/helpers/authHelper.helper";
 interface RouteProps {
   href: string;
   label: string;
@@ -30,25 +31,27 @@ const routeList: RouteProps[] = [
   },
 ];
 
+const isAuthenticated = await getUser();
+console.log("isAuthenticated: ", isAuthenticated);
+
 export const Navbar = () => {
   const isSubscribed = true;
 
-  const isAuthenticated = true;
   return (
     <header
-      className="sticky border-b-[1px] top-0 z-40 w-full  dark:border-b-slate-700 overflow-x-hidden
-			bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60
+      className="sticky border-b top-0 z-40 w-full  dark:border-b-slate-700 overflow-x-hidden
+			bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 h-15 max-h-15
 		"
     >
-      <NavigationMenu className="mx-auto">
-        <NavigationMenuList className="container min-h-14 w-screen flex justify-between ">
+      <NavigationMenu>
+        <NavigationMenuList className="container w-screen px-8 min-h-14 flex justify-between ">
           <NavigationMenuItem className="font-bold md:flex hidden">
             <Link
               rel="noreferrer noopener"
               href="/"
               className="ml-2 font-bold text-xl flex"
             >
-              <span className="uppercase bg-gradient-to-r from-[#667EEA] to-[#764BA2] text-transparent bg-clip-text">
+              <span className="uppercase bg-linear-to-r from-[#667EEA] to-[#764BA2] text-transparent bg-clip-text">
                 🚀 Next Stripe
               </span>
             </Link>
@@ -88,6 +91,7 @@ export const Navbar = () => {
                 rel="noreferrer noopener"
                 type="submit"
                 className={`border ${buttonVariants({ variant: "secondary" })}`}
+                onClick={signOutAction}
               >
                 Logout
                 <LogOut className="w-4 h-4 ml-2" />
@@ -98,7 +102,7 @@ export const Navbar = () => {
             {!isAuthenticated && (
               <Link
                 rel="noreferrer noopener"
-                href="/api/auth/login"
+                href="/sign-in"
                 className={`border ${buttonVariants({ variant: "secondary" })}`}
               >
                 Login
@@ -110,7 +114,7 @@ export const Navbar = () => {
                 rel="noreferrer noopener"
                 href="/premium"
                 // shining animated button with purple gradient
-                className={`border bg-gradient-to-r from-[#667EEA] to-[#764BA2] text-white ${buttonVariants(
+                className={`border bg-linear-to-r from-[#667EEA] to-[#764BA2] text-white ${buttonVariants(
                   {
                     variant: "secondary",
                   },

@@ -11,6 +11,17 @@ import {
 
 const client = await getClient();
 export const auth = betterAuth({
+  user: {
+    additionalFields: {
+      plan: {
+        type: "string",
+        required: false,
+        defaultValue: "free",
+        input: false,
+      },
+    },
+  },
+
   database: mongodbAdapter(client),
   emailAndPassword: {
     enabled: true,

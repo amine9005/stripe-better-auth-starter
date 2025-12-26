@@ -1,19 +1,11 @@
-import { Button } from "@/components/ui/atoms/button/button";
-import Link from "next/link";
+import Hero from "@/components/ui/organisms/Hero";
+import { Pricing } from "@/components/ui/organisms/Pricing";
 
 export default function Home() {
   return (
-    <main className="flex justify-between items-center p-10">
-      <Link href={"/sign-up"}>
-        <Button>Sign Up</Button>
-      </Link>
-
-      <Link href={"/sign-in"}>
-        <Button>Sign In</Button>
-      </Link>
-      <Link href={"/verify-email"}>
-        <Button>Verify Email</Button>
-      </Link>
+    <main className="flex flex-col justify-center items-center">
+      <Hero />
+      <Pricing />
     </main>
   );
 }

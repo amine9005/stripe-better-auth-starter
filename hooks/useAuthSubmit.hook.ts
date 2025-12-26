@@ -62,6 +62,11 @@ export function useSignInSubmit(form: SignInFormType) {
         redirect("/verify-email");
       }
       if (success) {
+        const url = localStorage.getItem("stripe_payment_link");
+        if (url) {
+          localStorage.removeItem(url);
+          redirect(url);
+        }
         redirect("/dashboard");
       }
       setLoading(false);

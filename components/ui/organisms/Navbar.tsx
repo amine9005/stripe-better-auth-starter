@@ -10,7 +10,8 @@ import { ModeToggle } from "./ModeToggle";
 import { Button, buttonVariants } from "../atoms/button/button";
 import Link from "next/link";
 import { signOutAction } from "@/app/api/actions/auth/auth.controller";
-import { getUser } from "@/helpers/authHelper.helper";
+import { useEffect, useState } from "react";
+import { getUser } from "@/helpers/authClientHelper.helper";
 interface RouteProps {
   href: string;
   label: string;
@@ -31,10 +32,18 @@ const routeList: RouteProps[] = [
   },
 ];
 
-const isAuthenticated = await getUser();
-console.log("isAuthenticated: ", isAuthenticated);
+// const isAuthenticated = await getUser();
+// console.log("isAuthenticated: ", isAuthenticated);
 
 export const Navbar = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const setUser = async () => {
+      setIsAuthenticated((await getUser()) ? true : false);
+    };
+    setUser();
+  });
   const isSubscribed = true;
 
   return (

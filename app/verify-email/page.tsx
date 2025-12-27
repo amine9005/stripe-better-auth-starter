@@ -1,4 +1,4 @@
-import VerifyEmailAction from "@/components/ui/actions/forms/auth/VerifiyEmail.action";
+import VerifyEmailAction from "@/components/ui/actions/forms/auth/VerifyEmail.action";
 import { authNotRequired } from "@/helpers/authHelper.helper";
 
 const VerifyEmailPage = async () => {

@@ -64,7 +64,7 @@ export function useSignInSubmit(form: SignInFormType) {
       if (success) {
         const url = localStorage.getItem("stripe_payment_link");
         if (url) {
-          localStorage.removeItem(url);
+          localStorage.removeItem("stripe_payment_link");
           redirect(url);
         }
         redirect("/dashboard");

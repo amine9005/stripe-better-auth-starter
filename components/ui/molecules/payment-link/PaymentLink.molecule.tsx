@@ -1,8 +1,9 @@
 "use client";
-import { getUser } from "@/helpers/authHelper.helper";
+
 import { redirect } from "next/navigation";
 import { memo } from "react";
 import { Button } from "@/components/ui/atoms/button/button";
+import { getUser } from "@/helpers/authClientHelper.helper";
 
 interface Props {
   href: string;

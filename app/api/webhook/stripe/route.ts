@@ -2,6 +2,8 @@ import { stripeClient } from "@/lib/stripe";
 import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
 import { getClient } from "@/db/mongoose";
+import SubscriptionModel from "@/db/models/Subscription.model";
+import mongoose from "mongoose";
 
 const db = await getClient();
 
@@ -23,6 +25,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  const dbSession = await mongoose.startSession();
+  dbSession.startTransaction();
   try {
     switch (event.type) {
       case "checkout.session.completed":
@@ -47,7 +51,11 @@ export async function POST(req: NextRequest) {
           if (!user.customerId) {
             await db
               .collection("user")
-              .updateOne({ id: user._id }, { $set: { customerId } });
+              .updateOne(
+                { id: user._id },
+                { $set: { customerId } },
+                { session: dbSession },
+              );
           }
 
           const lineItems = session.line_items?.data || [];
@@ -68,10 +76,61 @@ export async function POST(req: NextRequest) {
               } else {
                 throw new Error("Invalid priceId");
               }
+
+              const sub = await SubscriptionModel.findOneAndUpdate(
+                {
+                  userId: user._id,
+                },
+                {
+                  plan: "premium",
+                  period:
+                    priceId === process.env.STRIPE_PERSONAL_YEARLY_PRICE_ID
+                      ? "yearly"
+                      : "monthly",
+                  startDate: new Date(),
+                  endDate: endDate,
+                },
+
+                {
+                  session: dbSession,
+                  upsert: true,
+                  returnDocument: "after",
+                },
+              );
+              if (!sub) {
+                throw new Error("Subscription not found");
+              }
+
+              await db.collection("user").findOneAndUpdate(
+                { _id: user._id },
+                {
+                  $set: { plan: "premium", subscription: sub._id },
+                },
+                { session: dbSession },
+              );
             } else {
             }
           }
+
+          await dbSession.commitTransaction();
+          dbSession.endSession();
+          break;
         }
+      default:
+        console.log("Unhandled event type ", event.type);
     }
-  } catch (error) {}
+  } catch (error) {
+    await dbSession.abortTransaction();
+    dbSession.endSession();
+    console.error("Error Handing Stripe Event: ", error);
+    return NextResponse.json(
+      { success: false, message: "Failed to handle event", error },
+      { status: 500 },
+    );
+  }
+
+  return NextResponse.json(
+    { success: true, message: "Stripe Event Handled Successfully" },
+    { status: 200 },
+  );
 }
